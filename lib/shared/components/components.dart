@@ -169,7 +169,7 @@ Widget BuildArticleItem(article, context) => InkWell(
                     Expanded(
                       child: Text(
                         '${article['title']}',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.bodyLarge,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
