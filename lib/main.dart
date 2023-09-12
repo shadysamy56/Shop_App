@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_import, await_only_futures, use_key_in_widget_constructors, avoid_print, unnecessary_null_comparison
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:to_do_list/layout/shop_app/cubit/shopcubit.dart';
 import 'package:to_do_list/layout/shop_app/shop_layout.dart';
 import 'package:to_do_list/modules/shop_app/login/login_screen.dart';
 import 'package:to_do_list/modules/shop_app/on_boarding/onboarding_screen.dart';
+import 'package:to_do_list/modules/social_app/social_login/social_login_screen.dart';
 import 'package:to_do_list/shared/bloc_observer.dart';
 import 'package:to_do_list/shared/components/constants.dart';
 import 'package:to_do_list/shared/network/local/cache_helper.dart';
@@ -19,6 +21,8 @@ import 'package:to_do_list/shared/styles/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
 
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
@@ -90,7 +94,7 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: ThemeMode.light,
-            home: startWidget,
+            home: SocialLoginScreen(),
           );
         },
       ),
