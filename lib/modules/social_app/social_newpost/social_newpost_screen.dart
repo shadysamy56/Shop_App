@@ -48,7 +48,7 @@ class SocialNewPostScreen extends StatelessWidget {
                       navigateAndfinish(context, SocialFeedsScreen());
                     }
                   },
-                  child: Text('POST...add.sssasasdadad'))
+                  child: Text('POST...add.sssasasdadad ,,, Nahhas'))
             ],
           ),
           body: Padding(
