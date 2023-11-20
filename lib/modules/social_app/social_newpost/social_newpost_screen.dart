@@ -16,7 +16,16 @@ class SocialNewPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is SocialCreateNewPostSuccessState) {
+          showToast(
+              text: 'Post Uploaded Successfully', state: ToastStates.SUCCESS);
+          navigateAndfinish(context, SocialFeedsScreen());
+        }
+        if (state is SocialCreateNewPostErrorState) {
+          showToast(text: 'Post Uploaded Failed', state: ToastStates.ERROR);
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -43,12 +52,8 @@ class SocialNewPostScreen extends StatelessWidget {
                       );
                     }
                     SocialCubit.get(context).getPosts();
-
-                    if (state is SocialCreateNewPostSuccessState) {
-                      navigateAndfinish(context, SocialFeedsScreen());
-                    }
                   },
-                  child: Text('POST...add.sssasasdadad ,,, nahhas , shady'))
+                  child: Text('POST'))
             ],
           ),
           body: Padding(
