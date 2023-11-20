@@ -3,3 +3,5 @@
 //https://newsapi.org/v2/everything?q=tesla&apiKey=60f6ac3e8b2042a0a42ed98e87653f13
 
 String? token;
+
+String? uId;

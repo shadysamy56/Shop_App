@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_import, await_only_futures, use_key_in_widget_constructors, avoid_print, unnecessary_null_comparison
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,14 +11,20 @@ import 'package:to_do_list/layout/news_app/cubit/states.dart';
 import 'package:to_do_list/layout/news_app/news_layout.dart';
 import 'package:to_do_list/layout/shop_app/cubit/shopcubit.dart';
 import 'package:to_do_list/layout/shop_app/shop_layout.dart';
+import 'package:to_do_list/layout/social_app/cubit/socialcubit.dart';
+import 'package:to_do_list/layout/social_app/social_layout.dart';
 import 'package:to_do_list/modules/shop_app/login/login_screen.dart';
 import 'package:to_do_list/modules/shop_app/on_boarding/onboarding_screen.dart';
+import 'package:to_do_list/modules/social_app/social_call_shortcut/social_call_screen.dart';
 import 'package:to_do_list/modules/social_app/social_login/social_login_screen.dart';
+import 'package:to_do_list/modules/social_app/social_splash/animated%20test.dart';
+import 'package:to_do_list/modules/social_app/social_splash/social_splash_screen.dart';
 import 'package:to_do_list/shared/bloc_observer.dart';
 import 'package:to_do_list/shared/components/constants.dart';
 import 'package:to_do_list/shared/network/local/cache_helper.dart';
 import 'package:to_do_list/shared/network/remote/dio_helper.dart';
 import 'package:to_do_list/shared/styles/themes.dart';
+import 'package:page_transition/page_transition.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,22 +37,17 @@ void main() async {
 
   bool? isDark = CacheHelper.getBool(key: 'isDark');
 
-  bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
-
+  //bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
   token = CacheHelper.getData(key: 'token');
 
-  print(token);
+  uId = CacheHelper.getData(key: 'uId');
 
   Widget? widget;
 
-  if (onBoarding != null) {
-    if (token != null) {
-      widget = ShopLayout();
-    } else {
-      widget = ShopLoginScreen();
-    }
+  if (uId != null) {
+    widget = SocialLayout();
   } else {
-    widget = OnBoardingScreen();
+    widget = SocialLoginScreen();
   }
 
   runApp(MyApp(
@@ -85,6 +87,11 @@ class MyApp extends StatelessWidget {
             ..getFavorites()
             ..getUserData(),
         ),
+        BlocProvider(
+          create: (context) => SocialCubit()
+            ..getUserData()
+            ..getPosts(),
+        ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
@@ -94,7 +101,16 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: ThemeMode.light,
-            home: SocialLoginScreen(),
+            home: AnimatedSplashScreen(
+              splash: Image.asset('images/logo.png'),
+              splashIconSize: 400,
+              duration: 4000,
+              splashTransition: SplashTransition.scaleTransition,
+              animationDuration: Duration(seconds: 3),
+              backgroundColor: Colors.white,
+              nextScreen: startWidget!,
+              //nextScreen: SocialCallScreen(),
+            ),
           );
         },
       ),

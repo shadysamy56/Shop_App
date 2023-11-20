@@ -1,14 +1,16 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, avoid_types_as_parameter_names, unused_element, avoid_print
+// ignore_for_file: prefer_const_literals_to_create_immutables, avoid_types_as_parameter_names, unused_element, avoid_print, constant_identifier_names
 // ignore_for_file: non_constant_identifier_names, sized_box_for_whitespace, prefer_const_constructors, use_function_type_syntax_for_parameters
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:icon_broken/icon_broken.dart';
 import 'package:to_do_list/layout/shop_app/cubit/shopcubit.dart';
 import 'package:to_do_list/modules/news_app/web_view/webview_screen.dart';
 import 'package:to_do_list/modules/shop_app/login/login_screen.dart';
 import 'package:to_do_list/shared/cubit/appcubit.dart';
 import 'package:to_do_list/shared/network/local/cache_helper.dart';
 import 'package:to_do_list/shared/styles/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Widget defaultButton({
   double width = double.infinity,
@@ -67,6 +69,23 @@ Widget defaultFormfield({
           onPressed: suffixPressed,
         ),
       ),
+    );
+
+Widget defaultAppBar({
+  required BuildContext context,
+  required title,
+  List<Widget>? actions,
+}) =>
+    AppBar(
+      leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            IconBroken.Arrow___Left_2,
+          )),
+      title: Text(title),
+      actions: actions,
     );
 
 Widget BuildTaskItem(Map model, context) => Dismissible(
@@ -320,16 +339,36 @@ void navigateAndfinish(context, Widget) {
   );
 }
 
-void showToast({required String text}) => Fluttertoast.showToast(
-    msg: text,
-    toastLength: Toast.LENGTH_LONG,
-    gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 5,
-    backgroundColor: Colors.green,
-    textColor: Colors.white,
-    fontSize: 20.0);
+void showToast({required String text, required ToastStates state}) =>
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: chooseToastColor(state),
+        textColor: Colors.white,
+        fontSize: 16.0);
 
-void signOut(context) => CacheHelper.removeData(
+enum ToastStates { SUCCESS, ERROR, WARNING }
+
+Color? chooseToastColor(ToastStates state) {
+  Color? toastcolor;
+
+  switch (state) {
+    case ToastStates.SUCCESS:
+      toastcolor = Colors.green;
+      break;
+    case ToastStates.ERROR:
+      toastcolor = Colors.red;
+      break;
+    case ToastStates.WARNING:
+      toastcolor = Colors.yellow;
+      break;
+  }
+  return toastcolor;
+}
+
+void ShopsignOut(context) => CacheHelper.removeData(
       key: 'token',
     ).then((value) {
       if (value) {
@@ -340,4 +379,37 @@ void signOut(context) => CacheHelper.removeData(
 void printFullText(String text) {
   final pattern = RegExp('.{1,800}');
   pattern.allMatches(text).forEach((match) => print(match.group(0)));
+}
+
+void callPhoneNumber({
+  required String phoneNumber,
+}) async {
+  final Uri url = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+void openWhatsAppChat({
+  required String phoneNumber,
+}) async {
+  String EGphoneNumber = '+2$phoneNumber';
+
+  // Create a WhatsApp URL with the phone number
+  String whatsappUrl = 'https://wa.me/$EGphoneNumber';
+
+  // Check if the WhatsApp app is installed on the device
+  if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
+    // Launch the WhatsApp chat
+    await launchUrl(Uri.parse(whatsappUrl));
+  } else {
+    // Handle the case where WhatsApp is not installed
+    print('WhatsApp is not installed on this device.');
+  }
 }

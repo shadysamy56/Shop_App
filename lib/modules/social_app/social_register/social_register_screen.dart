@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_list/modules/social_app/social_login/social_login_screen.dart';
 import 'package:to_do_list/modules/social_app/social_register/cubit/registercubit.dart';
 import 'package:to_do_list/modules/social_app/social_register/cubit/registerstates.dart';
 import 'package:to_do_list/shared/components/components.dart';
@@ -19,7 +20,14 @@ class SocialRegisterScreen extends StatelessWidget {
       create: (context) => SocialRegisterCubit(),
       child: BlocConsumer<SocialRegisterCubit, SocialRegisterStates>(
         listener: (context, state) {
-          if (state is SocialRegisterSuccessState) {}
+          if (state is SocialUserCreateSuccessState) {
+            showToast(
+                text: 'Registeration Successfully', state: ToastStates.SUCCESS);
+            navigateAndfinish(context, SocialLoginScreen());
+          }
+          if (state is SocialUserCreateErrorState) {
+            showToast(text: 'Registeration Failed', state: ToastStates.ERROR);
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -31,8 +39,15 @@ class SocialRegisterScreen extends StatelessWidget {
                   child: Form(
                     key: formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        CircleAvatar(
+                          radius: 50.0,
+                          backgroundImage: AssetImage('images/logo.png'),
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
                         Text(
                           'REGISTER',
                           style: TextStyle(
@@ -113,13 +128,13 @@ class SocialRegisterScreen extends StatelessWidget {
                                 child: MaterialButton(
                                   onPressed: () {
                                     if (formKey.currentState!.validate()) {
-                                      // SocialRegisterCubit.get(context)
-                                      //     .userRegister(
-                                      //   name: nameController.text,
-                                      //   email: emailController.text,
-                                      //   password: passwordController.text,
-                                      //   phone: phoneController.text,
-                                      // );
+                                      SocialRegisterCubit.get(context)
+                                          .userRegister(
+                                        name: nameController.text,
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                        phone: phoneController.text,
+                                      );
                                     }
                                   },
                                   child: Text(

@@ -92,7 +92,7 @@ class ShopSettingsScreen extends StatelessWidget {
                           backgroundColor: Colors.blueGrey,
                         ),
                         onPressed: () {
-                          signOut(context);
+                          ShopsignOut(context);
                         },
                         child: Text('Sign Out')),
                   ],

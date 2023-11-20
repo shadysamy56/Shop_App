@@ -35,9 +35,14 @@ ThemeData lightTheme = ThemeData(
   ),
   textTheme: TextTheme(
       bodyLarge: TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w700,
-  )),
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
+      )),
   fontFamily: 'Roboto',
 );
 
@@ -72,8 +77,13 @@ ThemeData darkTheme = ThemeData(
   ),
   textTheme: TextTheme(
       bodyLarge: TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w700,
-  )),
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
+      )),
   fontFamily: 'Roboto',
 );
